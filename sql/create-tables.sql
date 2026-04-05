@@ -11,7 +11,7 @@ CREATE TABLE "users" (
 	"name" VARCHAR(50) NOT NULL UNIQUE,
 	"email" VARCHAR(100) NOT NULL UNIQUE,
 	"password" VARCHAR(50) NOT NULL,
-	"avatar" BYTEA, 
+	"avatar" VARCHAR(100), 
 	"id_anime" INT,
 
 	FOREIGN KEY ("id_anime") REFERENCES "anime" ("id")

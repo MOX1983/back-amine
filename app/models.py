@@ -14,7 +14,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True, nullable=False)
     email = Column(String(100), unique=True, nullable=False)
-    avatar = Column(LargeBinary, nullable=True)
+    avatar = Column(String)
     password = Column(String(50), nullable=False)
 
     anime_list = relationship("Anime", secondary=user_anime_table, back_populates="users")
@@ -30,4 +30,4 @@ class Anime(Base):
 
     users = relationship("User", secondary=user_anime_table, back_populates="anime_list")
 
-
+    

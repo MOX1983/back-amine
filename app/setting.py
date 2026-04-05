@@ -11,7 +11,7 @@ class Settings:
     DBNAME = os.getenv("DBNAME")
 
     def get_db_url(self):
-        return f"postgresql+asyncpg://{self.USER}:{self.PASSWORD}@{self.HOST}:{self.PORT}/{self.DBNAME}"
+        return f"postgresql://{self.USER}:{self.PASSWORD}@{self.HOST}:{self.PORT}/{self.DBNAME}"
 
 setting = Settings()
 
