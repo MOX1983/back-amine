@@ -15,7 +15,7 @@ class User(Base):
     name = Column(String(50), unique=True, nullable=False)
     email = Column(String(100), unique=True, nullable=False)
     avatar = Column(String)
-    password = Column(String(50), nullable=False)
+    password = Column(String(255), nullable=False)
 
     anime_list = relationship("Anime", secondary=user_anime_table, back_populates="users")
 
