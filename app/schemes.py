@@ -3,12 +3,18 @@ from typing_extensions import Annotated
 from pydantic import BaseModel, EmailStr, Field, ConfigDict
 
 
-class User(BaseModel):
-    id: int
+class UserBase(BaseModel):
     name: Annotated[str, Field(min_length=2)]
     email: EmailStr
-    avatar: Optional[bytes] = None
     password: Annotated[str, Field(min_length=8)]
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: Annotated[str, Field(min_length=8)]
+
+class User(UserBase):
+    id: int
+    avatar: Optional[bytes] = None
 
     model_config = ConfigDict(from_attributes=True)
 

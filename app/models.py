@@ -30,4 +30,5 @@ class Anime(Base):
 
     users = relationship("User", secondary=user_anime_table, back_populates="anime_list")
 
+
     

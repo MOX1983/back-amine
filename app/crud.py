@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 
 from models import User
+from schemes import User as UserScheme, UserBase
 
 import bcrypt
 
@@ -11,7 +12,7 @@ def getUsers(db: Session):
 def getUser(db: Session, user_id: int):
     return db.query(User).filter(User.id == user_id).first()
 
-def updateUser(db: Session, user: User):
+def updateUser(db: Session, user: UserBase):
     db.query(User).filter(User.id == user.id).update(user.to_dict())
     db.commit()
     db.refresh(user)
@@ -30,8 +31,9 @@ def findUserById(db: Session, user_id: int):
     return db.query(User).filter(User.id == user_id).first()
 
 
-def createUser(db: Session, user: User):
-    user = User(email=user.email, name=user.name, password=bcrypt.hashpw(bytes(user.password, 'utf-8'),  bcrypt.gensalt()))
+def createUser(db: Session, user: UserBase):
+    hashed_password = bcrypt.hashpw(user.password.encode('utf-8'), bcrypt.gensalt())
+    user = User(email=user.email, name=user.name, password=hashed_password.decode("utf-8"))
     db.add(user)
     db.commit()
     db.refresh(user)
