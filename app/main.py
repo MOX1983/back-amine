@@ -25,11 +25,6 @@ def get_db():
     finally:
         db.close()
 
-user = User()
-user.name = 'mox'
-user.email = 'mox@gmail.com'
-user.password = '123123'
-
 @app.get("/")
 def get_all(db: Session = Depends(get_db)):
     return getUsers(db)
@@ -45,12 +40,20 @@ def login(data: UserLogin, db: Session = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=400, detail="User not found")
 
-    if bcrypt.checkpw(data.password.encode("utf-8"), user.password.encode("utf-8")):
-        access_token = create_token(data={"sub":user.name})
-        return {"access_token": access_token,
-                "user": {
-                    "id": user.id,
-                    "name": user.name,
-                    "email": user.email
-                }}
-    raise HTTPException(status_code=400, detail="Invalid credentials")
+    if not bcrypt.checkpw(data.password.encode("utf-8"), user.password.encode("utf-8")):
+        raise HTTPException(status_code=400, detail="Invalid credentials")
+
+    access_token = create_token(data={"sub": user.name})
+    return {"access_token": access_token,
+            "user": {
+                "id": user.id,
+                "name": user.name,
+                "email": user.email
+            }}
+
+@app.get("/valid_token") #422 Unprocessable Content
+def valid_token(token: str):
+    payload = verify_token(token)
+    if payload is None:
+        raise HTTPException(status_code=400, detail="Invalid token")
+    return {"token": payload}
